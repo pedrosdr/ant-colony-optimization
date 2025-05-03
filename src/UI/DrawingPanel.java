@@ -29,8 +29,6 @@ public class DrawingPanel extends JPanel {
         Conversor conversor = new Conversor(getHeight());
 
         for(IDrawable drawable : drawables) {
-            gd.setStroke(new BasicStroke(3.0f));
-            gd.setColor(new Color(255, 0, 0, 20));
             drawable.draw(gd, conversor);
         }
     }

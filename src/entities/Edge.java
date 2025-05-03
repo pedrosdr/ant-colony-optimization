@@ -5,42 +5,45 @@ import java.util.Objects;
 
 public class Edge implements IDrawable {
     // fields
-    private int nodeA;
-    private int nodeB;
+    private Node nodeA;
+    private Node nodeB;
     private double pheromones;
     private double distance;
 
     // constructors
     public Edge() {}
 
-    public Edge(int node1, int node2) {
+    public Edge(Node node1, Node node2) {
+        System.out.println(node1.getX());
         this.nodeA = node1;
         this.nodeB = node2;
+        this.distance = Math.sqrt(
+                Math.pow(nodeA.getX() - nodeB.getX(), 2.0) + Math.pow(nodeA.getY() - nodeB.getY(), 2.0)
+        );
     }
 
-    public Edge(int node1, int node2, double pheromones, double distance) {
+    public Edge(Node node1, Node node2, double pheromones) {
         this.nodeA = node1;
         this.nodeB = node2;
         this.pheromones = pheromones;
-        this.distance = distance;
     }
 
     // properties
 
 
-    public int getNodeA() {
+    public Node getNodeA() {
         return nodeA;
     }
 
-    public void setNodeA(int nodeA) {
+    public void setNodeA(Node nodeA) {
         this.nodeA = nodeA;
     }
 
-    public int getNodeB() {
+    public Node getNodeB() {
         return nodeB;
     }
 
-    public void setNodeB(int nodeB) {
+    public void setNodeB(Node nodeB) {
         this.nodeB = nodeB;
     }
 
@@ -62,8 +65,16 @@ public class Edge implements IDrawable {
 
     // methods
     public void draw(Graphics2D gd, Conversor conversor) {
-        Position pos_start = conversor.convert(0, 0);
-        Position pos_end = conversor.convert((int)distance, (int)distance);
+        Position pos_start = conversor.convert((int)nodeA.getX(), (int)nodeA.getY());
+        Position pos_end = conversor.convert((int)nodeB.getX(), (int)nodeB.getY());
+
+        float lineWidth = pheromones < 1.0? 3.0f : 1.0f + (float)Math.log(2.0 * pheromones);
+        gd.setStroke(new BasicStroke(lineWidth));
+
+        int colorAlpha = (int)(1 + 0.2 * pheromones);
+        colorAlpha = Math.min(colorAlpha, 255);
+        System.out.println(colorAlpha);
+        gd.setColor(new Color(255, 0, 0, colorAlpha));
         gd.drawLine(pos_start.getX(), pos_start.getY(), pos_end.getX(), pos_end.getY());
     }
 
@@ -72,7 +83,7 @@ public class Edge implements IDrawable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Edge edge = (Edge) o;
-        return nodeA == edge.nodeA && nodeB == edge.nodeB;
+        return nodeA.equals(edge.nodeA) && nodeB.equals(edge.nodeB);
     }
 
     @Override
