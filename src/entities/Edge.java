@@ -26,6 +26,9 @@ public class Edge implements IDrawable {
         this.nodeA = node1;
         this.nodeB = node2;
         this.pheromones = pheromones;
+        this.distance = Math.sqrt(
+                Math.pow(nodeA.getX() - nodeB.getX(), 2.0) + Math.pow(nodeA.getY() - nodeB.getY(), 2.0)
+        );
     }
 
     // properties
@@ -73,7 +76,6 @@ public class Edge implements IDrawable {
 
         int colorAlpha = (int)(1 + 0.2 * pheromones);
         colorAlpha = Math.min(colorAlpha, 255);
-        System.out.println(colorAlpha);
         gd.setColor(new Color(255, 0, 0, colorAlpha));
         gd.drawLine(pos_start.getX(), pos_start.getY(), pos_end.getX(), pos_end.getY());
     }
@@ -83,12 +85,13 @@ public class Edge implements IDrawable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Edge edge = (Edge) o;
-        return nodeA.equals(edge.nodeA) && nodeB.equals(edge.nodeB);
+        return (nodeA.equals(edge.nodeA) && nodeB.equals(edge.nodeB)) ||
+                (nodeA.equals(edge.nodeB) && nodeB.equals(edge.nodeA));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nodeA, nodeB);
+        return Objects.hash(nodeA, nodeB) + Objects.hash(nodeB, nodeA);
     }
 
     @Override

@@ -1,39 +1,44 @@
 package entities;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Graph implements IDrawable{
     //fields
-    private HashMap<Node, HashMap<Node, Edge>> adjList = new HashMap<>();
-    private Set<Node> nodes = new HashSet<>();
-    private Set<Edge> edges = new HashSet<>();
+    private final HashMap<Node, HashMap<Node, Edge>> adjList = new HashMap<>();
+    private final List<Node> nodes = new ArrayList<>();
+    private final List<Edge> edges = new ArrayList<>();
 
     // constructors
     public Graph() {}
 
     // methods
     public void addEdge(Edge edge) {
-
         Node node1 = edge.getNodeA();
         Node node2 = edge.getNodeB();
 
-        adjList.put(node1, new HashMap<>());
-        adjList.put(node2, new HashMap<>());
+        addNode(node1);
+        addNode(node2);
 
-        adjList.get(node1).put(node2, edge);
-        adjList.get(node2).put(node1, edge);
+        if(!adjList.get(node1).containsKey(node2))
+            adjList.get(node1).put(node2, edge);
 
-        nodes.add(node1);
-        nodes.add(node2);
-        edges.add(edge);
+        if(!adjList.get(node2).containsKey(node1))
+            adjList.get(node2).put(node1, edge);
+
+        if(!edges.contains(edge))
+            edges.add(edge);
     }
 
     public void addNode(Node node) {
-        nodes.add(node);
-        adjList.put(node, new HashMap<>());
+        if(!nodes.contains(node))
+            nodes.add(node);
+
+        if(!adjList.containsKey(node))
+            adjList.put(node, new HashMap<>());
     }
 
     public void connectAll(double pheromones) {
@@ -57,11 +62,11 @@ public class Graph implements IDrawable{
         return adjList;
     }
 
-    public Set<Node> getNodes() {
+    public List<Node> getNodes() {
         return nodes;
     }
 
-    public Set<Edge> getEdges() {
+    public List<Edge> getEdges() {
         return edges;
     }
 

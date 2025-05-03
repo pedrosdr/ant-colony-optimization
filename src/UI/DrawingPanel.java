@@ -9,7 +9,7 @@ import java.util.HashSet;
 
 public class DrawingPanel extends JPanel {
     // fields
-    private HashSet<IDrawable> drawables = new HashSet<>();
+    private IDrawable drawable;
 
     // constructors
     public DrawingPanel() {
@@ -18,18 +18,15 @@ public class DrawingPanel extends JPanel {
     }
 
     // methods
-    public void addDrawable(IDrawable drawable) {
-        drawables.add(drawable);
+    public void draw(IDrawable drawable) {
+        this.drawable = drawable;
     }
 
     @Override
     public void paint(Graphics g) {
-        Graphics2D gd = (Graphics2D) g;
-        gd.drawOval(20, 20, 30, 30);
-        Conversor conversor = new Conversor(getHeight());
+        if(drawable == null) return;
 
-        for(IDrawable drawable : drawables) {
-            drawable.draw(gd, conversor);
-        }
+        Graphics2D gd = (Graphics2D) g;
+        drawable.draw(gd, new Conversor(getHeight()));
     }
 }

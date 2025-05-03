@@ -2,8 +2,13 @@ package application;
 
 import UI.DrawingPanel;
 import UI.MainFrame;
+import entities.Ant;
+import entities.Edge;
 import entities.Graph;
 import entities.Node;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Program {
     public static void main(String[] args) {
@@ -26,14 +31,23 @@ public class Program {
         g.addNode(new Node(6, 425.0, 479.0));
         g.addNode(new Node(7, 350.0, 350.0));
         g.addNode(new Node(8, 900.0, 370.0));
-        g.connectAll(20.0);
-        System.out.println(g);
+        g.connectAll(200.0);
+
+        Ant ant = new Ant(g.getNodes().get(1), g);
+        ant.move(g.getNodes().get(6));
+        ant.move(g.getNodes().get(2));
+        ant.move(g.getNodes().get(7));
+        ant.move(g.getNodes().get(2));
+        ant.move(g.getNodes().get(1));
+        ant.move(g.getNodes().get(8));
 
         MainFrame frame = new MainFrame();
 
         DrawingPanel panel = new DrawingPanel();
-        panel.addDrawable(g);
         frame.add(panel);
         frame.setVisible(true);
+        panel.draw(g);
+
+        panel.draw(ant.getPath());
     }
 }
