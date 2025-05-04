@@ -2,11 +2,9 @@ package application;
 
 import UI.DrawingPanel;
 import UI.MainFrame;
-import entities.Ant;
-import entities.Edge;
-import entities.Graph;
-import entities.Node;
+import entities.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,12 +32,10 @@ public class Program {
         g.connectAll(200.0);
 
         Ant ant = new Ant(g.getNodes().get(1), g);
-        ant.move(g.getNodes().get(6));
-        ant.move(g.getNodes().get(2));
-        ant.move(g.getNodes().get(7));
-        ant.move(g.getNodes().get(2));
-        ant.move(g.getNodes().get(1));
-        ant.move(g.getNodes().get(8));
+
+        AntColonyOptim model = new AntColonyOptim(g, 1.0, 1.0, 3.0);
+
+        model.cicle(ant);
 
         MainFrame frame = new MainFrame();
 

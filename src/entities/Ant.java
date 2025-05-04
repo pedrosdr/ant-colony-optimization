@@ -41,6 +41,10 @@ public class Ant {
         return path;
     }
 
+    public Set<Node> getNotVisitedNodes() {
+        return notVisitedNodes;
+    }
+
     // methods
     public void move(Node node) {
         if(!notVisitedNodes.contains(node)) return;
