@@ -1,14 +1,17 @@
 package entities;
 
 import java.util.List;
+import java.util.Random;
 
 public class AntColonyOptim {
     // fields
     private double alpha = 1.0;
     private double beta = 1.0;
-    private double proximityConstant = 3.0;
-    private double pheromoneRate = 3.0;
+    private double deltaConstant = 200.0;
     private double evaporationRate = 0.1;
+    private double maxPheromones = 1.0;
+    private double minPheromones = 0.1;
+    private int nAnts = 10;
     private Graph environment;
     private Runnable runnable;
 
@@ -19,18 +22,22 @@ public class AntColonyOptim {
 
     public AntColonyOptim(
             Graph environment,
+            int nAnts,
             double alpha,
             double beta,
             double proximityConstant,
-            double pheromoneRate,
-            double evaporationRate
+            double evaporationRate,
+            double minPheromones,
+            double maxPheromones
     ) {
+        this.nAnts = nAnts;
         this.environment = environment;
         this.alpha = alpha;
         this.beta = beta;
-        this.proximityConstant = proximityConstant;
-        this.pheromoneRate = pheromoneRate;
+        this.deltaConstant = proximityConstant;
         this.evaporationRate = evaporationRate;
+        this.minPheromones = minPheromones;
+        this.maxPheromones = maxPheromones;
     }
 
     // properties
@@ -54,8 +61,8 @@ public class AntColonyOptim {
         this.beta = beta;
     }
 
-    public double getProximityConstant() {
-        return proximityConstant;
+    public double getDeltaConstant() {
+        return deltaConstant;
     }
 
     public Graph getEnvironment() {
@@ -66,24 +73,40 @@ public class AntColonyOptim {
         this.environment = environment;
     }
 
-    public void setProximityConstant(double proximityConstant) {
-        this.proximityConstant = proximityConstant;
+    public void setDeltaConstant(double deltaConstant) {
+        this.deltaConstant = deltaConstant;
     }
 
     // methods
     public void evaporate() {
         environment.getEdges()
-                .forEach(e -> e.setPheromones(e.getPheromones() * (1.0 - evaporationRate)));
+                .forEach(e -> {
+                    double newPheromones = e.getPheromones() * (1-evaporationRate);
+                    if(newPheromones > maxPheromones)
+                        e.setPheromones(maxPheromones);
+                    else if(newPheromones < minPheromones)
+                        e.setPheromones(minPheromones);
+                    else
+                        e.setPheromones(newPheromones);
+                });
     }
 
     public void incrementPheromones(Ant ant) {
         double totalDistance = ant.getPath().getTotalDistance();
         ant.getPath().getEdges()
-                .forEach(e -> e.setPheromones(e.getPheromones() + pheromoneRate / totalDistance));
+                .forEach(e -> {
+                    double newPheromones = e.getPheromones() + (deltaConstant / totalDistance);
+                    if(newPheromones > maxPheromones)
+                        e.setPheromones(maxPheromones);
+                    else if(newPheromones < minPheromones)
+                        e.setPheromones(minPheromones);
+                    else
+                        e.setPheromones(newPheromones);
+                });
     }
 
     public double getProximity(Edge edge) {
-        return proximityConstant / edge.getDistance();
+        return 1.0 / edge.getDistance();
     }
 
     public double getDesire(Edge edge) {
@@ -127,13 +150,28 @@ public class AntColonyOptim {
         ant.move(getNextNode(ant));
     }
 
-    public void cycle(Ant ant) {
-        while(!ant.getNotVisitedNodes().isEmpty()) {
-            step(ant);
+    public void cycle() {
+        Ant[] ants = new Ant[nAnts];
+        for(int i = 0; i < nAnts; i++) {
+            Random rand = new Random();
+            int randNum = rand.nextInt(environment.getNodes().size());
+            ants[i] = new Ant(environment.getNodes().get(randNum), environment);
+        }
+
+        Ant bestAnt = ants[0];
+        for(int i = 0; i < nAnts; i++) {
+            Ant ant = ants[i];
+            while(!ant.getNotVisitedNodes().isEmpty()) {
+                step(ant);
+            }
+
+            if(ant.getPath().getTotalDistance() < bestAnt.getPath().getTotalDistance()) {
+                bestAnt = ant;
+            }
         }
 
         evaporate();
-        incrementPheromones(ant);
+        incrementPheromones(bestAnt);
 
         if(runnable != null)
             runnable.run();

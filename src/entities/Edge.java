@@ -71,10 +71,10 @@ public class Edge implements IDrawable {
         Position pos_start = conversor.convert((int)nodeA.getX(), (int)nodeA.getY());
         Position pos_end = conversor.convert((int)nodeB.getX(), (int)nodeB.getY());
 
-        float lineWidth = pheromones < 1.0? 3.0f : 1.0f + (float)(2.0 * pheromones);
+        float lineWidth = (float) ((pheromones-0.1)*(20.0-3.0)/(1.0-0.1)+3.0);
         gd.setStroke(new BasicStroke(lineWidth));
 
-        int colorAlpha = (int)(1 + 100.0 * pheromones);
+        int colorAlpha = (int) ((pheromones-0.1)*(255.0-50.0)/(1.0-0.1)+50.0);
         colorAlpha = Math.min(colorAlpha, 255);
         gd.setColor(new Color(255, 0, 0, colorAlpha));
         gd.drawLine(pos_start.getX(), pos_start.getY(), pos_end.getX(), pos_end.getY());
