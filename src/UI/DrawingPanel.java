@@ -20,6 +20,7 @@ public class DrawingPanel extends JPanel {
     // methods
     public void draw(IDrawable drawable) {
         this.drawable = drawable;
+        repaint();
     }
 
     @Override
@@ -27,6 +28,7 @@ public class DrawingPanel extends JPanel {
         if(drawable == null) return;
 
         Graphics2D gd = (Graphics2D) g;
+        gd.clearRect(0, 0, getWidth(), getHeight());
         drawable.draw(gd, new Conversor(getHeight()));
     }
 }

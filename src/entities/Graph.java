@@ -70,6 +70,12 @@ public class Graph implements IDrawable{
         return edges;
     }
 
+    public double getTotalDistance() {
+        return edges.stream()
+                .map(Edge::getDistance)
+                .reduce(0.0, Double::sum);
+    }
+
     // methods
     @Override
     public String toString() {
