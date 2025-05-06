@@ -76,7 +76,7 @@ public class Edge implements IDrawable {
 
         int colorAlpha = (int) ((pheromones-0.1)*(255.0-50.0)/(1.0-0.1)+50.0);
         colorAlpha = Math.min(colorAlpha, 255);
-        gd.setColor(new Color(255, 0, 0, colorAlpha));
+        gd.setColor(new Color(58, 68, 242, colorAlpha));
         gd.drawLine(pos_start.getX(), pos_start.getY(), pos_end.getX(), pos_end.getY());
     }
 

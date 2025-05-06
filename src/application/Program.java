@@ -12,18 +12,20 @@ public class Program {
         frame.setVisible(true);
 
         Graph g = new Graph();
-        g.addNode(new Node(0, 20.0, 20.0));
-        g.addNode(new Node(1, 200.0, 29.0));
-        g.addNode(new Node(2, 400.0, 300.0));
-        g.addNode(new Node(3, 600.0, 150.0));
-        g.addNode(new Node(4, 150.0, 350.0));
-        g.addNode(new Node(5, 52.0, 525.0));
-        g.addNode(new Node(6, 225.0, 479.0));
-        g.addNode(new Node(7, 250.0, 550.0));
-        g.addNode(new Node(8, 900.0, 370.0));
+        g.addNode(new Node(0, 40.0, 30.0));
+        g.addNode(new Node(1, 220.0, 39.0));
+        g.addNode(new Node(2, 420.0, 310.0));
+        g.addNode(new Node(3, 620.0, 160.0));
+        g.addNode(new Node(4, 170.0, 360.0));
+        g.addNode(new Node(5, 73.0, 535.0));
+        g.addNode(new Node(6, 245.0, 489.0));
+        g.addNode(new Node(7, 270.0, 560.0));
+        g.addNode(new Node(8, 920.0, 380.0));
+        g.addNode(new Node(9, 50.0, 610.0));
         g.connectAll(0.1);
 
         AntColonyOptim model = new AntColonyOptim(g);
+        model.setnAnts(20);
         model.setRunnable(() -> panel.draw(g));
         panel.draw(g);
 

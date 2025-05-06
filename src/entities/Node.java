@@ -51,10 +51,10 @@ public class Node implements IDrawable {
     public void draw(Graphics2D gd, Conversor conversor) {
         Position position = conversor.convert((int)x, (int)y);
         gd.setStroke(new BasicStroke(2.0f));
-        gd.setColor(Color.black);
-        gd.drawOval(position.getX()-7, position.getY()-7, 14, 14);
-        gd.setColor(Color.blue);
-        gd.fillOval(position.getX()-7, position.getY()-7, 14, 14);
+        gd.setColor(new Color(59, 59, 66));
+        gd.drawOval(position.getX()-8, position.getY()-8, 16, 16);
+        gd.setColor(new Color(175, 176, 196));
+        gd.fillOval(position.getX()-8, position.getY()-8, 16, 16);
     }
 
     @Override

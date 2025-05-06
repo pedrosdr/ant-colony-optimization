@@ -41,6 +41,38 @@ public class AntColonyOptim {
     }
 
     // properties
+    public double getEvaporationRate() {
+        return evaporationRate;
+    }
+
+    public void setEvaporationRate(double evaporationRate) {
+        this.evaporationRate = evaporationRate;
+    }
+
+    public double getMaxPheromones() {
+        return maxPheromones;
+    }
+
+    public void setMaxPheromones(double maxPheromones) {
+        this.maxPheromones = maxPheromones;
+    }
+
+    public double getMinPheromones() {
+        return minPheromones;
+    }
+
+    public void setMinPheromones(double minPheromones) {
+        this.minPheromones = minPheromones;
+    }
+
+    public int getnAnts() {
+        return nAnts;
+    }
+
+    public void setnAnts(int nAnts) {
+        this.nAnts = nAnts;
+    }
+
     public void setRunnable(Runnable runnable) {
         this.runnable = runnable;
     }
