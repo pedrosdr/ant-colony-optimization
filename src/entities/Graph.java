@@ -76,6 +76,18 @@ public class Graph implements IDrawable{
                 .reduce(0.0, Double::sum);
     }
 
+    public void clear() {
+        adjList.clear();
+        nodes.clear();
+        edges.clear();
+    }
+
+    public void reset() {
+        for(Edge edge : edges) {
+            edge.setPheromones(0.1);
+        }
+    }
+
     // methods
     @Override
     public String toString() {
@@ -85,13 +97,13 @@ public class Graph implements IDrawable{
     }
 
     @Override
-    public void draw(Graphics2D gd, Conversor conversor) {
+    public void draw(Graphics2D gd) {
         for(Edge edge : edges) {
-            edge.draw(gd, conversor);
+            edge.draw(gd);
         }
 
         for(Node node : nodes) {
-            node.draw(gd, conversor);
+            node.draw(gd);
         }
     }
 }

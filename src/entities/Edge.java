@@ -67,17 +67,14 @@ public class Edge implements IDrawable {
     }
 
     // methods
-    public void draw(Graphics2D gd, Conversor conversor) {
-        Position pos_start = conversor.convert((int)nodeA.getX(), (int)nodeA.getY());
-        Position pos_end = conversor.convert((int)nodeB.getX(), (int)nodeB.getY());
-
-        float lineWidth = (float) ((pheromones-0.1)*(20.0-3.0)/(1.0-0.1)+3.0);
+    public void draw(Graphics2D gd) {
+        float lineWidth = (float) ((pheromones-0.1)*(13.0-3.0)/(1.0-0.1)+3.0);
         gd.setStroke(new BasicStroke(lineWidth));
 
         int colorAlpha = (int) ((pheromones-0.1)*(255.0-50.0)/(1.0-0.1)+50.0);
         colorAlpha = Math.min(colorAlpha, 255);
         gd.setColor(new Color(58, 68, 242, colorAlpha));
-        gd.drawLine(pos_start.getX(), pos_start.getY(), pos_end.getX(), pos_end.getY());
+        gd.drawLine((int)nodeA.getX(), (int)nodeA.getY(), (int)nodeB.getX(), (int)nodeB.getY());
     }
 
     @Override
