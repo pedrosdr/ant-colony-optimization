@@ -1,11 +1,12 @@
 package UI;
 
-import entities.AntColonyOptim;
+import entities.ACO;
+import entities.MaxMinACO;
 import entities.Graph;
-import entities.Node;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.Objects;
 
 public class MainFrame extends JFrame {
     private DrawingPanel panel = new DrawingPanel();
@@ -15,6 +16,7 @@ public class MainFrame extends JFrame {
     private final JTextField tfBeta = new JTextField("1.0");
     private final JTextField tfEvaporation = new JTextField("0.1");
     private final JTextField tfQ = new JTextField("200.0");
+    private final JComboBox<String> select = new JComboBox<>();
     private Thread thread;
 
     // constructors
@@ -92,8 +94,17 @@ public class MainFrame extends JFrame {
         );
         add(btnClear);
 
-        label.setBounds(
+        select.setBounds(
                 btnClear.getX() + btnClear.getWidth() + 10,
+                btnClear.getY(),
+                200, 20
+        );
+        select.addItem("Ant System");
+        select.addItem("Max-Min Ant System");
+        add(select);
+
+        label.setBounds(
+                select.getX() + select.getWidth() + 10,
                 panel.getHeight() + 10,
                 200, 50
         );
@@ -122,13 +133,12 @@ public class MainFrame extends JFrame {
         killThread();
 
         thread = new Thread(()-> {
-            AntColonyOptim model = new AntColonyOptim(g);
+            ACO model = select.getSelectedIndex() == 0? new ACO(g) : new MaxMinACO(g);
             model.setAlpha(Double.parseDouble(tfAlpha.getText()));
             model.setBeta(Double.parseDouble(tfBeta.getText()));
-            model.setnAnts(Integer.parseInt(tfNAnts.getText()));
+            model.setNAnts(Integer.parseInt(tfNAnts.getText()));
             model.setEvaporationRate(Double.parseDouble(tfEvaporation.getText()));
             model.setDeltaConstant(Double.parseDouble(tfQ.getText()));
-            model.setRunnable(() -> panel.draw(g));
 
             for(int i = 0; i < 10000; i++) {
                 try {
