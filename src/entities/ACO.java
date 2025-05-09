@@ -8,12 +8,14 @@ public class ACO {
     // fields
     protected double alpha = 1.0;
     protected double beta = 1.0;
-    protected double deltaConstant = 200.0;
+    protected double deltaConstant = 10.0;
     protected double evaporationRate = 0.1;
     protected int nAnts = 10;
     protected Graph environment;
 
     // constructors
+    public ACO() {}
+
     public ACO(Graph environment) {
         this.environment = environment;
     }

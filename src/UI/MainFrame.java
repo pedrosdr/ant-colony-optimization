@@ -1,8 +1,6 @@
 package UI;
 
-import entities.ACO;
-import entities.MaxMinACO;
-import entities.Graph;
+import entities.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -15,8 +13,10 @@ public class MainFrame extends JFrame {
     private final JTextField tfAlpha = new JTextField("1.0");
     private final JTextField tfBeta = new JTextField("1.0");
     private final JTextField tfEvaporation = new JTextField("0.1");
-    private final JTextField tfQ = new JTextField("200.0");
+    private final JTextField tfQ = new JTextField("10.0");
     private final JComboBox<String> select = new JComboBox<>();
+    private boolean bridgeOn = false;
+    private Graph lastGraph = null;
     private Thread thread;
 
     // constructors
@@ -30,6 +30,8 @@ public class MainFrame extends JFrame {
 
         panel.setBounds(0, 0, getWidth() - 130, getHeight() - 100);
         add(panel);
+        lastGraph = panel.getGraph();
+        System.out.println(lastGraph);
 
         tfNAnts.setBounds(
                 getWidth() - 80,
@@ -97,10 +99,29 @@ public class MainFrame extends JFrame {
         select.setBounds(
                 btnClear.getX() + btnClear.getWidth() + 10,
                 btnClear.getY(),
-                200, 20
+                300, 20
         );
         select.addItem("Ant System");
         select.addItem("Max-Min Ant System");
+        select.addItem("Double Bridge (Equal Lengths)");
+        select.addItem("Double Bridge (Different Lengths)");
+        select.addActionListener(e -> {
+            killThread();
+            if (select.getSelectedIndex() == 2) {
+                ACO model = new DoubleBridge(BridgeType.EQUAL_LENGTHS);
+                panel.setGraph(model.getEnvironment());
+                bridgeOn = true;
+            } else if (select.getSelectedIndex() == 3){
+                ACO model = new DoubleBridge(BridgeType.DIFFERENT_LENGTHS);
+                panel.setGraph(model.getEnvironment());
+                bridgeOn = true;
+            } else {
+                panel.getGraph().reset();
+                panel.setGraph(lastGraph);
+                bridgeOn = false;
+            }
+            panel.draw(panel.getGraph());
+        });
         add(select);
 
         label.setBounds(
@@ -128,12 +149,24 @@ public class MainFrame extends JFrame {
         }
     }
     private void btnStartClick(ActionEvent e) {
-        Graph g = panel.getGraph();
-        g.reset();
+        panel.getGraph().reset();
         killThread();
 
         thread = new Thread(()-> {
-            ACO model = select.getSelectedIndex() == 0? new ACO(g) : new MaxMinACO(g);
+
+            ACO model = null;
+            if(select.getSelectedIndex() == 0) {
+                model = new ACO(panel.getGraph());
+            } else if (select.getSelectedIndex() == 1) {
+                model = new MaxMinACO(panel.getGraph());
+            } else if (select.getSelectedIndex() == 2) {
+                model = new DoubleBridge(BridgeType.EQUAL_LENGTHS);
+                panel.setGraph(model.getEnvironment());
+            } else {
+                model = new DoubleBridge(BridgeType.DIFFERENT_LENGTHS);
+                panel.setGraph(model.getEnvironment());
+            }
+
             model.setAlpha(Double.parseDouble(tfAlpha.getText()));
             model.setBeta(Double.parseDouble(tfBeta.getText()));
             model.setNAnts(Integer.parseInt(tfNAnts.getText()));
@@ -152,7 +185,7 @@ public class MainFrame extends JFrame {
                 } catch (InterruptedException ex) {
                     return;
                 }
-                panel.draw(g);
+                panel.draw(panel.getGraph());
                 label.setText(String.format("Época %d", i+1));
             }
         });

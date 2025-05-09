@@ -8,7 +8,7 @@ public class Ant {
     // fields
     private Node node;
     private Node initialNode;
-    private final Graph path = new Graph();
+    private Graph path = new Graph();
     private Graph environment;
     private final Set<Node> notVisitedNodes = new HashSet<>();
 
@@ -42,6 +42,10 @@ public class Ant {
 
     public Graph getPath() {
         return path;
+    }
+
+    public void setPath(Graph path) {
+        this.path = path;
     }
 
     public Set<Node> getNotVisitedNodes() {

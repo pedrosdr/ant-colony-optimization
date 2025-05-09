@@ -9,6 +9,8 @@ public class MaxMinACO extends ACO{
     private double minPheromones = 0.1;
 
     // constructors
+    public MaxMinACO() {}
+
     public MaxMinACO(Graph environment) {
         super(environment);
     }

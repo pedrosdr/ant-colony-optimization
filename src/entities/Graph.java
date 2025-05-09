@@ -56,6 +56,10 @@ public class Graph implements IDrawable{
         return adjList.get(node1).get(node2);
     }
 
+    public Node getNode(int key) {
+        return nodes.stream().filter(n -> n.getKey() == key).toList().getFirst();
+    }
+
     // properties
 
     public HashMap<Node, HashMap<Node, Edge>> getAdjList() {
