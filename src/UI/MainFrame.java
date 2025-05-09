@@ -116,7 +116,7 @@ public class MainFrame extends JFrame {
                 panel.setGraph(model.getEnvironment());
                 bridgeOn = true;
             } else {
-                panel.getGraph().reset();
+                lastGraph.reset();
                 panel.setGraph(lastGraph);
                 bridgeOn = false;
             }
